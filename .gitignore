@@ -1,0 +1,27 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Composer
+vendor/
+composer.phar
+
+# CodeIgniter
+writable/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+build/
+
+# Tests (coverage)
+tests/_support/_bootstrap.php
