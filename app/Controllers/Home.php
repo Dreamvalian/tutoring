@@ -52,26 +52,30 @@ class Home extends BaseController
     {
         $model = new PendaftarModel();
         $noWa = $this->request->getPost('no_wa');
+        $programId = $this->request->getPost('id_program');
 
-        // Data diurutkan sesuai form: nama, alamat, tgl_lahir, no_wa, sekolah, kelas, nama_ortu, wa_ortu
+        if (empty($programId)) {
+            return redirect()->back()->with('error', 'Program wajib dipilih.');
+        }
+
         $data = [
-            'username' => $noWa,
-            'password' => sha1((string) $noWa),
-            'nama_lengkap' => $this->request->getPost('nama_lengkap'),
-            'alamat_rumah' => $this->request->getPost('alamat_rumah'),
-            'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
-            'no_wa' => $noWa,
-            'asal_sekolah' => $this->request->getPost('asal_sekolah'),
-            'kelas' => $this->request->getPost('kelas'),
-            'nama_orangtua' => $this->request->getPost('nama_orangtua'),
-            'wa_orangtua' => $this->request->getPost('wa_orangtua'),
-            'id_program' => null,
+            'username'       => $noWa,
+            'password'       => password_hash($noWa, PASSWORD_DEFAULT),
+            'nama_lengkap'   => $this->request->getPost('nama_lengkap'),
+            'alamat_rumah'   => $this->request->getPost('alamat_rumah'),
+            'tanggal_lahir'  => $this->request->getPost('tanggal_lahir'),
+            'no_wa'          => $noWa,
+            'asal_sekolah'   => $this->request->getPost('asal_sekolah'),
+            'kelas'          => $this->request->getPost('kelas'),
+            'nama_orangtua'  => $this->request->getPost('nama_orangtua'),
+            'wa_orangtua'    => $this->request->getPost('wa_orangtua'),
+            'id_program'     => $programId,
         ];
 
         try {
             $model->insert($data);
         } catch (DatabaseException $e) {
-            return redirect()->back()->with('error', 'Gagal menyimpan. Pastikan kolom id_program di tabel pengguna boleh kosong (NULL).');
+            return redirect()->back()->with('error', 'Gagal menyimpan: ' . $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Pendaftaran berhasil ditambahkan');

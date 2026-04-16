@@ -236,16 +236,22 @@ class Admin extends BaseController {
         if (!$adminId) {
             return redirect()->to('/login');
         }
+
+        $namaProgram = $this->request->getPost('nama_program');
+        if (empty($namaProgram)) {
+            return redirect()->back()->with('error', 'Nama program wajib diisi.');
+        }
+
         $model->insert([
-            'nama_program' => $this->request->getPost('nama_program'),
+            'nama_program'  => $namaProgram,
             'jml_pertemuan' => $this->request->getPost('jml_pertemuan'),
-            'nama_hari' => $this->request->getPost('nama_hari'),
-            'waktu' => $this->request->getPost('waktu'),
-            'durasi' => $this->request->getPost('durasi'),
-            'id_admin' => $adminId,
+            'nama_hari'     => $this->request->getPost('nama_hari'),
+            'waktu'         => $this->request->getPost('waktu'),
+            'durasi'        => $this->request->getPost('durasi'),
+            'id_admin'      => $adminId,
         ]);
 
-        return redirect()->to('/admin/program');
+        return redirect()->to('/admin/program')->with('success', 'Program berhasil ditambahkan.');
     }
 
     public function updateProgram($id = null) {
@@ -287,24 +293,29 @@ class Admin extends BaseController {
         if ($programId === null || $programId === '') {
             return redirect()->back()->with('error', 'Program wajib dipilih.');
         }
+
+        $noWa = $this->request->getPost('no_wa');
+
         // Urutan sesuai wizard: Program -> Data Diri (Nama, Alamat, Tgl Lahir, No WA, Sekolah, Kelas, Nama Ortu, WA Ortu)
         $model->insert([
-            'id_program' => $programId,
-            'nama_lengkap' => $nama,
-            'alamat_rumah' => $this->request->getPost('alamat_rumah'),
-            'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
-            'no_wa' => $this->request->getPost('no_wa'),
-            'asal_sekolah' => $this->request->getPost('asal_sekolah'),
-            'kelas' => $this->request->getPost('kelas'),
-            'nama_orangtua' => $this->request->getPost('nama_orangtua'),
-            'wa_orangtua' => $this->request->getPost('wa_orangtua'),
+            'username'       => $noWa,
+            'password'       => password_hash($noWa, PASSWORD_DEFAULT),
+            'id_program'     => $programId,
+            'nama_lengkap'   => $nama,
+            'alamat_rumah'   => $this->request->getPost('alamat_rumah'),
+            'tanggal_lahir'  => $this->request->getPost('tanggal_lahir'),
+            'no_wa'          => $noWa,
+            'asal_sekolah'   => $this->request->getPost('asal_sekolah'),
+            'kelas'          => $this->request->getPost('kelas'),
+            'nama_orangtua'  => $this->request->getPost('nama_orangtua'),
+            'wa_orangtua'    => $this->request->getPost('wa_orangtua'),
         ]);
         $source = $this->request->getPost('source');
         if ($source === 'admin') {
-            return redirect()->to('/admin/pendaftar')->with('success','Pendaftaran berhasil');
+            return redirect()->to('/admin/pendaftar')->with('success', 'Pendaftaran berhasil ditambahkan.');
         }
 
-        return redirect()->to('/daftar')->with('success','Pendaftaran berhasil');
+        return redirect()->to('/daftar')->with('success', 'Pendaftaran berhasil!');
     }
 
     public function updatePendaftar($id = null) {
