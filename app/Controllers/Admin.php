@@ -62,6 +62,12 @@ class Admin extends BaseController {
             return redirect()->to('/login');
         }
 
+        // Verify admin exists (FK constraint protection)
+        $adminExists = (new \App\Models\AdminModel())->find($adminId);
+        if (!$adminExists) {
+            return redirect()->back()->with('error', 'Admin tidak ditemukan. Silakan login ulang.');
+        }
+
         // Validasi input
         $nama = $this->request->getPost('nama_pengajar');
         $mapel = $this->request->getPost('mata_pelajaran');
@@ -232,9 +238,15 @@ class Admin extends BaseController {
 
     public function simpanProgram() {
         $model = new ProgramModel();
-        $adminId = session()->get('user_id');
+        $adminId = (int) session()->get('user_id');
         if (!$adminId) {
             return redirect()->to('/login');
+        }
+
+        // Verify admin exists (FK constraint protection)
+        $adminExists = (new \App\Models\AdminModel())->find($adminId);
+        if (!$adminExists) {
+            return redirect()->back()->with('error', 'Admin tidak ditemukan. Silakan login ulang.');
         }
 
         $namaProgram = $this->request->getPost('nama_program');
