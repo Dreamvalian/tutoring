@@ -52,7 +52,30 @@ class Home extends BaseController
     {
         $model = new PendaftarModel();
         $noWa = $this->request->getPost('no_wa');
+
+        // Support both: id_program (from dropdown) and program (from wizard cards)
         $programId = $this->request->getPost('id_program');
+        if (empty($programId)) {
+            $programName = $this->request->getPost('program');
+            if ($programName) {
+                // Map wizard slugs to DB names
+                $slugMap = [
+                    'matematika-grup'   => 'Matematika - Grup',
+                    'matematika-privat' => 'Matematika - Privat',
+                    'inggris-grup'      => 'Bahasa Inggris - Grup',
+                    'inggris-privat'    => 'Bahasa Inggris - Privat',
+                    'mandarin-grup'     => 'Bahasa Mandarin - Grup',
+                    'mandarin-privat'   => 'Bahasa Mandarin - Privat',
+                    'mapel-grup'        => 'Mapel - Grup',
+                    'mapel-privat'      => 'Mapel - Privat',
+                ];
+                $dbName = $slugMap[$programName] ?? $programName;
+                $program = (new ProgramModel())->where('nama_program', $dbName)->first();
+                if ($program) {
+                    $programId = $program['id_program'];
+                }
+            }
+        }
 
         if (empty($programId)) {
             return redirect()->back()->with('error', 'Program wajib dipilih.');
