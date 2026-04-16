@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin` (
   `id_admin` int(10) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -65,7 +65,7 @@ CREATE TABLE `pengajar` (
 CREATE TABLE `pengguna` (
   `id_pengguna` int(4) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `nama_lengkap` varchar(100) NOT NULL,
   `no_wa` varchar(20) NOT NULL,
   `id_program` int(10) DEFAULT NULL,

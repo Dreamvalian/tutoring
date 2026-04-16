@@ -21,7 +21,7 @@ class TestSeeder extends Seeder
         $this->db->table('admin')->insert([
             'id_admin' => 2,
             'username' => 'testadmin',
-            'password' => sha1('password123')
+            'password' => password_hash('password123', PASSWORD_DEFAULT)
         ]);
         
         // Insert test programs

@@ -86,8 +86,6 @@ final class LoginControllerTest extends CIUnitTestCase
 
         // Auth::logout redirects to /login
         $result->assertRedirectTo('/login');
-        // Note: In test environment, session destruction may not work the same way
-        // The redirect assertion is the main verification that logout works
     }
 
     public function testProtectedRouteRedirectsToLogin()

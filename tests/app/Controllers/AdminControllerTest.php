@@ -103,8 +103,8 @@ final class AdminControllerTest extends CIUnitTestCase
             'durasi' => '90 menit'
         ]);
 
-        // simpanProgram redirects to /admin/program without setting flashdata
         $result->assertRedirectTo('/admin/program');
+        $result->assertSessionHas('success');
     }
 
     public function testUpdateProgram()
@@ -120,7 +120,6 @@ final class AdminControllerTest extends CIUnitTestCase
             'durasi' => '120 menit'
         ]);
 
-        // updateProgram redirects to /admin/program without setting flashdata
         $result->assertRedirectTo('/admin/program');
     }
 
@@ -140,7 +139,6 @@ final class AdminControllerTest extends CIUnitTestCase
         $programModel = new \App\Models\ProgramModel();
         $program = $programModel->where('nama_program', 'Matematika - Privat')->first();
 
-        // hapusProgram redirects to /admin/program without setting flashdata
         $result = $this->get('/admin/program/hapus/' . $program['id_program']);
 
         $result->assertRedirectTo('/admin/program');

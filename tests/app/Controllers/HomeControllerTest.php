@@ -45,6 +45,7 @@ final class HomeControllerTest extends CIUnitTestCase
     public function testRegisterPendaftarSuccess()
     {
         $data = [
+            'id_program' => 1,
             'nama_lengkap' => 'Test Registration',
             'alamat_rumah' => 'Jl. Test Registrasi No. 99',
             'tanggal_lahir' => '2007-08-25',
@@ -65,6 +66,7 @@ final class HomeControllerTest extends CIUnitTestCase
     {
         $noWa = '087654321001';
         $data = [
+            'id_program' => 1,
             'nama_lengkap' => 'Data Verification Test',
             'alamat_rumah' => 'Jl. Verify No. 123',
             'tanggal_lahir' => '2009-05-10',
@@ -92,6 +94,7 @@ final class HomeControllerTest extends CIUnitTestCase
     {
         $noWa = '088888877701';
         $data = [
+            'id_program' => 1,
             'nama_lengkap' => 'Password Test',
             'alamat_rumah' => 'Jl. Password Test',
             'tanggal_lahir' => '2008-01-01',
@@ -108,7 +111,8 @@ final class HomeControllerTest extends CIUnitTestCase
         $db = \Config\Database::connect();
         $row = $db->table('pengguna')->where('no_wa', $noWa)->get()->getRow();
 
-        $this->assertEquals(sha1($noWa), $row->password);
+        // Password should be bcrypt hashed, not SHA1
+        $this->assertTrue(password_verify($noWa, $row->password));
     }
 
     public function testLandingPageContactSection()

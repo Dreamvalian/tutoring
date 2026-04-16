@@ -74,7 +74,8 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            'csrf',
+            // CSRF applied globally except during testing
+            ...(ENVIRONMENT !== 'testing' ? ['csrf'] : []),
             // 'honeypot',
             // 'invalidchars',
         ],

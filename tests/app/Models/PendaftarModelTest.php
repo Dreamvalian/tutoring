@@ -28,7 +28,7 @@ final class PendaftarModelTest extends CIUnitTestCase
     {
         $data = [
             'username' => '08155555555',
-            'password' => sha1('08155555555'),
+            'password' => password_hash('08155555555', PASSWORD_DEFAULT),
             'nama_lengkap' => 'Test Pendaftar Baru',
             'no_wa' => '08155555555',
             'id_program' => 2,
@@ -99,7 +99,7 @@ final class PendaftarModelTest extends CIUnitTestCase
         $noWa = '08777777777';
         $data = [
             'username' => $noWa,
-            'password' => sha1($noWa),
+            'password' => password_hash($noWa, PASSWORD_DEFAULT),
             'nama_lengkap' => 'Test Password',
             'no_wa' => $noWa
         ];
@@ -107,7 +107,7 @@ final class PendaftarModelTest extends CIUnitTestCase
         $id = $this->model->insert($data);
         $result = $this->model->find($id);
         
-        $this->assertEquals(sha1($noWa), $result['password']);
+        $this->assertTrue(password_verify($noWa, $result['password']));
     }
     
     public function testPendaftarHasAllRequiredFields()
